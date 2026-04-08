@@ -1,0 +1,357 @@
+/* =========================================================
+   SCOPED ROOT - Zero Leakage Policy (Architect Theme)
+   ========================================================= */
+   .edu-resume-scope {
+    --res-primary: #4f46e5;
+    --res-primary-hover: #4338ca;
+    --res-magic: #9333ea; /* Purple for the "Architect/AI" vibe */
+    --res-indigo-soft: rgba(79, 70, 229, 0.06);
+    --res-border: rgba(226, 232, 240, 0.8);
+    --res-text: #1e293b;
+    --res-text-muted: #64748b;
+    --res-card: #ffffff;
+    --res-bg: #f8fafc;
+    --res-input-bg: #f1f5f9;
+    --res-success: #10b981;
+    
+    background-color: transparent;
+    font-family: 'Inter', sans-serif;
+    color: var(--res-text);
+    transition: all 0.3s ease;
+}
+
+/* 100% RELIABLE THEME TOGGLE */
+.edu-resume-scope.dark, 
+body.dark .edu-resume-scope {
+    --res-border: rgba(255, 255, 255, 0.08);
+    --res-text: #f1f5f9;
+    --res-text-muted: #94a3b8;
+    --res-card: #1e293b;
+    --res-bg: #0f172a;
+    --res-input-bg: #0b1120;
+    --res-indigo-soft: rgba(79, 70, 229, 0.15);
+}
+
+.resume-page-container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+
+/* Header UI */
+.resume-header-section { text-align: center; margin-bottom: 40px; padding-top: 10px; }
+.header-badge-pill {
+    display: inline-block; padding: 6px 16px;
+    background: var(--res-indigo-soft); color: var(--res-primary);
+    border: 1px solid rgba(79, 70, 229, 0.15);
+    border-radius: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 16px;
+}
+.resume-main-title { font-size: 3rem; font-weight: 900; margin: 0; color: var(--res-text); letter-spacing: -0.02em; }
+.text-gradient-magic {
+    background: linear-gradient(135deg, var(--res-primary) 0%, var(--res-magic) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.resume-sub-text { color: var(--res-text-muted); font-size: 1.15rem; margin-top: 12px; }
+
+/* Workspace Input Card */
+.resume-workspace-card {
+    background: var(--res-card); border: 1px solid var(--res-border);
+    border-radius: 28px; padding: 35px; margin-bottom: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+}
+
+.input-flex-group { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+
+.input-column { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+.section-label { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--res-text-muted); letter-spacing: 0.5px; }
+
+/* Upload Drop Zone */
+.upload-drop-zone {
+    border: 2px dashed var(--res-border); border-radius: 20px;
+    display: flex; background: var(--res-indigo-soft); transition: 0.3s;
+    height: 100%; min-height: 220px;
+}
+.upload-drop-zone:hover { border-color: var(--res-primary); background: rgba(79, 70, 229, 0.08); }
+.upload-drop-zone.active { border-color: var(--res-success); background: rgba(16, 185, 129, 0.05); border-style: solid; }
+
+.upload-inner-label {
+    width: 100%; cursor: pointer; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px; padding: 20px; color: var(--res-text); text-align: center;
+}
+.file-name { font-weight: 700; font-size: 1.05rem; color: var(--res-text); }
+.file-hint { font-size: 0.85rem; color: var(--res-text-muted); }
+.icon-primary { color: var(--res-primary); }
+
+/* JD Textarea (Fixed Layout) */
+.jd-input-area {
+    background: var(--res-input-bg); border: 1px solid var(--res-border);
+    border-radius: 20px; padding: 20px; color: var(--res-text);
+    height: 100%; min-height: 220px; resize: none; outline: none; overflow-y: auto;
+    font-size: 1rem; line-height: 1.6; transition: 0.2s; box-sizing: border-box;
+}
+.jd-input-area:focus { border-color: var(--res-magic); box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.1); }
+
+/* Action Button */
+.enhance-action-btn {
+    width: 100%; background: linear-gradient(90deg, var(--res-primary), var(--res-magic)); 
+    color: white; padding: 18px; border-radius: 16px; font-weight: 700; font-size: 1.1rem; 
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+}
+.enhance-action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(147, 51, 234, 0.3); }
+.enhance-action-btn:disabled { opacity: 0.8; cursor: not-allowed; filter: grayscale(50%); }
+
+/* Staged Loading Bar */
+.re-status-box {
+    display: flex; align-items: center; gap: 20px;
+    background: var(--res-card); border: 1px solid var(--res-border); border-left: 4px solid var(--res-magic);
+    padding: 20px 25px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+.status-icon-ring {
+    width: 45px; height: 45px; border-radius: 50%; background: rgba(147, 51, 234, 0.1);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.text-magic { color: var(--res-magic); }
+.status-text-content { flex-grow: 1; }
+.status-primary { margin: 0 0 8px 0; font-weight: 700; color: var(--res-text); font-size: 0.95rem; }
+.re-progress-bar { width: 100%; height: 4px; background: var(--res-border); border-radius: 10px; overflow: hidden; }
+.re-progress-fill { width: 30%; height: 100%; background: var(--res-magic); border-radius: 10px; animation: slideProgress 2s infinite ease-in-out; }
+
+/* Comparison Table (Results) */
+.comparison-view-container {
+    background: var(--res-card); border-radius: 28px; padding: 40px;
+    border: 1px solid var(--res-border); box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+
+.comparison-header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--res-border);
+}
+.view-title { display: flex; align-items: center; gap: 12px; }
+.view-title h2 { margin: 0; font-size: 1.6rem; font-weight: 800; color: var(--res-text); }
+
+.comparison-table { display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; border: 1px solid var(--res-border); }
+
+.table-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--res-input-bg); border-bottom: 1px solid var(--res-border);
+}
+.header-tag { 
+    padding: 18px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; 
+    color: var(--res-text-muted); display: flex; align-items: center; gap: 8px; justify-content: center;
+}
+.header-tag.ai { color: var(--res-magic); border-left: 1px solid var(--res-border); background: rgba(147, 51, 234, 0.03); }
+
+.comparison-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--res-border); }
+.comparison-row:last-child { border-bottom: none; }
+
+.panel-side { padding: 30px; line-height: 1.7; font-size: 0.95rem; }
+.panel-side.original { background: var(--res-bg); color: var(--res-text-muted); opacity: 0.85; }
+.panel-side.enhanced { 
+    background: var(--res-card); color: var(--res-text); font-weight: 500;
+    border-left: 1px solid var(--res-border); position: relative;
+}
+
+/* Tooltip Logic */
+.insight-tooltip-trigger { position: absolute; top: 15px; right: 15px; color: var(--res-magic); cursor: help; background: rgba(147, 51, 234, 0.1); border-radius: 50%; padding: 4px; display: flex; }
+.tooltip-popup {
+    visibility: hidden; width: 300px; background: var(--res-card); color: var(--res-text);
+    border: 1px solid var(--res-magic); padding: 15px; border-radius: 12px; 
+    position: absolute; bottom: 130%; right: 0; opacity: 0; transition: 0.3s; 
+    font-size: 0.85rem; z-index: 100; font-weight: 500; line-height: 1.5;
+    box-shadow: 0 15px 35px rgba(147, 51, 234, 0.15); pointer-events: none;
+}
+.insight-tooltip-trigger:hover .tooltip-popup { visibility: visible; opacity: 1; pointer-events: auto; transform: translateY(-5px) ; }
+
+/* Buttons & Animations */
+.download-btn-premium {
+    background: var(--res-card); color: var(--res-text); border: 1px solid var(--res-border); padding: 12px 24px;
+    border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;
+}
+.download-btn-premium:hover { border-color: var(--res-primary); color: var(--res-primary); }
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pulse-icon { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
+@keyframes slideProgress { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+.animated-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-popIn { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+/* Responsiveness */
+@media (max-width: 850px) {
+    .input-flex-group { grid-template-columns: 1fr; }
+    .table-header, .comparison-row { grid-template-columns: 1fr; }
+    .panel-side.enhanced { border-left: none; border-top: 1px solid var(--res-border); }
+    .header-tag.ai { border-left: none; border-top: 1px solid var(--res-border); }
+}
+
+/* =========================================================
+   NATIVE BROWSER PRINT LAYOUT (Ctrl + P)
+   ========================================================= */
+
+/* Hide print-specific elements on normal screens */
+.print-only-header, 
+.print-only-footer, 
+.print-only-reasoning,
+.print-enhanced-label {
+    display: none;
+}
+
+/* =========================================================
+   ATS PRINT LAYOUT (EduNova Branded Report)
+   ========================================================= */
+
+   @media print {
+    /* 1. Remove Browser Margins & URLs */
+    @page {
+        size: A4;
+        margin: 15mm 20mm; 
+    }
+
+    /* 2. Break out of global website locks (Prevents 1-page cutoff) */
+    html, body, #root, .app-container, .main-layout {
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        position: static !important;
+        background: white !important;
+    }
+
+    /* 3. Hide the entire normal website UI */
+    .hide-on-print, 
+    nav, header, aside, .sidebar ,.novabot{ 
+        display: none !important; 
+    }
+
+    body, .edu-resume-scope { background: white !important; }
+
+    /* 4. Force the Hidden Report to display */
+    .ats-print-container {
+        display: flex !important; /* Overrides the inline style lock */
+        flex-direction: column;
+        background: white !important;
+        color: #0f172a !important;
+        font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+        width: 100%;
+        min-height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Report Styling */
+    .print-brand-header {
+        text-align: center;
+        border-bottom: 3px solid #4f46e5 !important;
+        padding-bottom: 12px;
+        margin-bottom: 25px;
+    }
+    .print-brand-header h2 { 
+        color: #4f46e5 !important; 
+        margin: 0; font-size: 18pt; font-weight: 900; letter-spacing: 2px; 
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .print-brand-header p { color: #64748b !important; margin: 5px 0 0 0; font-size: 10pt; text-transform: uppercase; font-weight: 600; }
+
+    .ats-header { margin-bottom: 20px; }
+    .ats-name { font-size: 20pt; font-weight: 800; margin: 0; color: #0f172a !important; text-transform: uppercase; }
+
+    .ats-section { margin-bottom: 20px; flex-grow: 1; }
+    .ats-section-title { 
+        font-size: 13pt; font-weight: 800; text-transform: uppercase; 
+        border-bottom: 1px solid #cbd5e1 !important; margin: 0 0 10px 0; padding-bottom: 5px;
+        color: #0f172a !important; 
+    }
+    
+    .print-disclaimer { font-size: 10pt; color: #64748b !important; font-style: italic; margin-bottom: 15px; }
+
+    .ats-bullet-list { margin: 0; padding-left: 20px; }
+    .print-bullet-item { margin-bottom: 15px; page-break-inside: avoid; }
+    
+    .print-enhanced-text { font-size: 10.5pt; line-height: 1.6; display: block; color: #1e293b !important; }
+    
+    .print-reasoning { 
+        font-size: 9.5pt; color: #4f46e5 !important; 
+        display: inline-block; margin-top: 4px; padding: 4px 8px;
+        background-color: #f8fafc !important; border-left: 2px solid #4f46e5 !important;
+        font-style: italic; font-weight: 500;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+
+    .print-footer {
+        margin-top: auto;
+        text-align: center;
+        font-size: 9pt;
+        color: #94a3b8 !important;
+        border-top: 1px solid #e2e8f0 !important;
+        padding-top: 12px;
+        padding-bottom: 10px;
+    }
+}
+/* =========================================================
+    FIX: Tooltip Visibility & Overflow Logic
+   ========================================================= */
+
+/* Allow the comparison containers to let children pop out */
+.comparison-view-container,
+.comparison-table,
+.comparison-row {
+    overflow: visible !important; /* Forces the container to show overlapping children */
+}
+
+/* Ensure the enhanced panel side doesn't clip the tooltip */
+.panel-side.enhanced { 
+    background: var(--res-card); 
+    color: var(--res-text); 
+    font-weight: 500;
+    border-left: 1px solid var(--res-border); 
+    position: relative;
+    overflow: visible !important; /* ADDED: This is the critical fix for clipping */
+    z-index: 10; /* Lower than tooltip, higher than content */
+}
+
+/* Tooltip Logic - Enhanced for Stacking */
+.insight-tooltip-trigger { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    color: var(--res-magic); 
+    cursor: help; 
+    background: rgba(147, 51, 234, 0.1); 
+    border-radius: 50%; 
+    padding: 4px; 
+    display: flex; 
+    z-index: 50; /* Ensure the icon sits above text */
+}
+
+.tooltip-popup {
+    visibility: hidden; 
+    width: 300px; 
+    background: var(--res-card); 
+    color: var(--res-text);
+    border: 1px solid var(--res-magic); 
+    padding: 15px; 
+    border-radius: 12px; 
+    position: absolute; 
+    bottom: 140%; /* Slightly adjusted for better clearance */
+    right: 0; 
+    opacity: 0; 
+    transition: 0.3s; 
+    font-size: 0.85rem; 
+    font-weight: 500; 
+    line-height: 1.5;
+    box-shadow: 0 15px 35px rgba(147, 51, 234, 0.25); 
+    pointer-events: none;
+    
+    /* CRITICAL FIX: Z-index must be extremely high to beat all other layers */
+    z-index: 9999 !important; 
+}
+
+/* Hover State - Added transform to trigger visibility */
+.insight-tooltip-trigger:hover .tooltip-popup { 
+    visibility: visible; 
+    opacity: 1; 
+    pointer-events: auto; 
+    transform: translateY(0); /* Aligns with your pop-in animation */
+}

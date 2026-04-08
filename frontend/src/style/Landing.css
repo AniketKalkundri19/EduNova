@@ -1,0 +1,142 @@
+/* === Color & Transition Enhancements === */
+
+/* 1. Subtle Animated Background for the Container */
+.landing-container {
+  min-height: calc(100vh - 80px);
+  margin-top: 60px;
+  /* Soft Mesh Gradient - Doesn't break layout, just adds depth */
+  background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+              radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+  background-color: #f8fafc;
+  transition: background 0.5s ease;
+  text-align: center;
+}
+
+body.dark .landing-container {
+  background-color: #0f172a;
+}
+
+/* 2. Hero Entrance Animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content{
+  margin-bottom: 40px;
+}
+.hero-content h1, 
+.tagline, 
+.description, 
+.cta-btn {
+  animation: fadeInUp 0.8s ease forwards;
+  
+}
+
+.tagline { animation-delay: 0.2s; opacity: 0; }
+.description { animation-delay: 0.4s; opacity: 0; }
+.cta-btn { animation-delay: 0.6s; opacity: 0; }
+
+/* 3. Refined Typography Colors */
+.brand-title {
+  font-size: 3rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  /* Modern Gradient Text */
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand-icon {
+  display: inline-block; /* Essential for transform animations to work */
+  animation: floatIcon 3s ease-in-out infinite;
+  filter: drop-shadow(0 5px 15px rgba(99, 102, 241, 0.3)); /* Adds a soft glow that follows the icon */
+}
+
+@keyframes floatIcon {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px); /* Adjust this for more/less movement */
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 4. High-Appeal CTA Button */
+.cta-btn {
+  margin-top: 1.5rem;
+  padding: 0.8rem 2.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  /* Updated to brand colors */
+  background: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cta-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: #4f46e5;
+  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+}
+
+/* 5. Glassmorphism for Feature Cards (Keeping your grid) */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 3rem;
+  background: rgba(99, 102, 241, 0.05); /* Tinted background */
+}
+
+.feature-card {
+  /* Frosted Glass Effect */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+body.dark .feature-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  background: #6366f1;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+}
+
+body.dark .feature-card:hover {
+  background: rgba(30, 41, 59, 0.8);
+}
+
+/* 6. Professional Footer Transition */
+.landing-footer {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.80rem;
+  opacity: 0.8;
+  color: #64748b;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  transition: color 0.3s ease;
+}
+
+body.dark .landing-footer {
+  color: #94a3b8;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}

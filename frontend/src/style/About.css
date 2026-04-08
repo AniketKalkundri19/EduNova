@@ -1,0 +1,106 @@
+/* about.css */
+
+/* 1. DEFINE THEME COLORS */
+.light-theme {
+  --about-bg: #f0f4f8;
+  --about-card: rgba(255, 255, 255, 0.85);
+  --about-text-primary: #1e293b;
+  --about-text-secondary: #475569;
+  --about-border: rgba(0, 0, 0, 0.08);
+  --about-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme {
+  --about-bg: #0b0f19;
+  --about-card: rgba(255, 255, 255, 0.04);
+  --about-text-primary: #f8fafc;
+  --about-text-secondary: rgba(248, 250, 252, 0.7);
+  --about-border: rgba(255, 255, 255, 0.1);
+  --about-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* 2. LAYOUT STYLES */
+.about-page-wrapper {
+  padding: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-header h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  /* This gradient looks great in both modes */
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-header p {
+  font-size: 1.2rem;
+  color: var(--about-text-secondary);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* 3. THE GLASS CARD */
+.about-glass-card {
+  background: var(--about-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--about-border);
+  border-radius: 28px;
+  padding: 35px;
+  box-shadow: var(--about-shadow);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.about-glass-card:hover {
+  transform: translateY(-10px);
+  border-color: #4da8da;
+  box-shadow: 0 20px 40px rgba(77, 168, 218, 0.15);
+}
+
+.wide-card {
+  grid-column: span 2;
+}
+
+.accent-icon {
+  font-size: 2rem;
+  color: #4da8da; /* EduNova Blue stays constant */
+  filter: drop-shadow(0 0 8px rgba(77, 168, 218, 0.3));
+}
+
+.about-glass-card h3 {
+  font-size: 1.6rem;
+  margin: 0;
+  color: var(--about-text-primary);
+}
+
+.about-glass-card p, .about-glass-card li {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--about-text-secondary);
+  margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .wide-card { grid-column: span 1; }
+  .about-header h1 { font-size: 2.2rem; }
+}

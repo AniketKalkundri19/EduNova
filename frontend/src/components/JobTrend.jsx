@@ -1,0 +1,1 @@
+export default function JobTrend() { return <h2>Job Trend</h2>; }

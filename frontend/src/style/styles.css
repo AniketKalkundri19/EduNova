@@ -1,0 +1,517 @@
+/* ========= General ========= */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f3f4f6;
+  color: #1f2937;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark {
+  background: #111827;
+  color: #f3f4f6;
+}
+
+/* ========= Header ========= */
+header.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f02a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark header.header {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+header .logo {
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  color: #6366f1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+  cursor: pointer;
+}
+
+.logo:hover{
+  transform: translateY(-4px);
+  
+  /* 3. Visual Feedback: Slight glow or color change */
+  color: #3b3eff;
+  filter: drop-shadow(0 4px 8px rgba(80, 83, 255, 0.3));
+}
+header button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 1.1rem;
+}
+
+.profile-icon {
+  text-transform: capitalize;
+  color: #6366f1;
+  display: inline-block; /* CRITICAL: transform does not work on inline elements */
+  
+  /* 1. The Smoothness: Animates both transform and color */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+  cursor: pointer;
+}
+
+.profile-icon:hover {
+  /* 2. Fixed Property: Standard translateY */
+  transform: translateY(-4px);
+  
+  /* 3. Visual Feedback: Slight glow or color change */
+  color: #3b3eff;
+  filter: drop-shadow(0 4px 8px rgba(80, 83, 255, 0.3));
+}
+
+/* ========= Layout Wrapper ========= */
+.layout {
+  display: flex;
+  height: calc(100vh - 60px); /* header height */
+  overflow: hidden;
+  margin-top: 60px; /* space for header */
+}
+
+.center-layout {
+  justify-content: center; /* for auth/form pages */
+  align-items: center;
+}
+
+/* ========= Sidebar ========= */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #ffffff;
+  color: #374151;
+  border-right: 1px solid #e2e8f02a;
+  transition: width 0.3s, background 0.3s, color 0.3s;
+  overflow-y: auto;
+  box-shadow: 0 5px 2px rgba(0,0,0,0.05);
+  
+}
+
+body.dark .sidebar {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 12px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #5053ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li .icon {
+  font-size: 1.8rem;
+  margin-right: 12px;
+  color: #5053ff;
+}
+
+.sidebar ul li:hover {
+  background: #4f46e5;
+  color: #ffffff;
+  transform: translateX(3px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+body.dark .sidebar ul li:hover {
+  background: #4f46e5;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed ul li {
+  justify-content: center;
+  padding: 16px 10px;
+}
+
+.sidebar.collapsed ul li .text {
+  display: none;
+}
+
+.collapse-btn {
+  margin: 20px 10px;
+  border: none;
+  padding: 10px;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.collapse-btn:hover {
+  background-color: #5053ff;
+}
+
+body.dark .collapse-btn:hover {
+  background-color: #4f46e5;
+}
+
+
+/* ========= Main Content ========= */
+.main-content {
+  flex: 1; /* take remaining width next to sidebar */
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  overflow-y: auto;
+  padding: auto;
+  background: inherit;
+}
+
+/* ========= Auth & Form Fullscreen Pages ========= */
+body.auth-active,
+body.form-active {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+body.auth-active .auth-container,
+body.form-active .form-wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+
+/* ========= NovaBot Container ========= */
+.novabot {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  
+  /* 1. Fix: Real Shadow with Glow */
+  /* This creates a soft 'lifting' effect using your brand colors */
+  filter: drop-shadow(0 10px 20px rgba(31, 41, 55, 0.15))
+          drop-shadow(0 4px 6px rgba(79, 70, 229, 0.1));
+  
+  /* 2. Professional Floating Animation */
+  animation: novaFloat 4s ease-in-out infinite;
+  
+  /* 3. Smooth Scale on Hover */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.novabot:hover {
+  /* Makes the bot 'react' when the user gets close */
+  transform: scale(1.1) translateY(-5px);
+  filter: drop-shadow(0 15px 25px rgba(79, 70, 229, 0.25));
+}
+
+/* 4. The Animation Keyframes */
+@keyframes novaFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px); /* Adjust for more/less 'bobbing' */
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 5. Mobile Adjustment (Optional but recommended) */
+@media (max-width: 768px) {
+  .novabot {
+    bottom: 15px;
+    right: 15px;
+    transform: scale(0.9); /* Slightly smaller on phones */
+  }
+}
+
+/* Container for when the bot is closed to sync animations */
+.bot-launcher-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  animation: floating 3s ease-in-out infinite; /* Syncs tooltip and button */
+}
+
+/* ===== Popping Text (Tooltip) ===== */
+.bot-tooltip {
+  position: relative;
+  background: #ffffff;
+  color: #1e1b4b;
+  padding: 10px 16px;
+  border-radius: 18px 18px 4px 18px; /* Modern asymmetric design */
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.1);
+  z-index: 1001;
+  pointer-events: none;
+  
+  /* Entrance Animation */
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: bottom right;
+}
+
+/* The small triangle at the bottom */
+.bot-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  right: 12px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #ffffff;
+}
+
+/* ===== Robot Toggle Button ===== */
+.chat-btn {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  position: relative;
+}
+
+/* Attention-grabbing Pulse Ring */
+.chat-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #4f46e5;
+  z-index: -1;
+  animation: pulse-ring 2s infinite;
+}
+
+.chat-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.5);
+}
+
+/* ===== Chat Window ===== */
+.chat-window {
+  width: 380px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background: #ffffff;
+  animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===== Header, Body, & Messages (Optimized) ===== */
+.chat-header {
+  background: #4f46e5;
+  color: #ffffff;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-msg {
+  padding: 12px 16px;
+  border-radius: 18px;
+  max-width: 80%;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  background: #4f46e5;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-msg.bot {
+  align-self: flex-start;
+  background: #e2e8f0;
+  color: #1e293b;
+  border-bottom-left-radius: 4px;
+}
+
+/* ===== Chat Footer ===== */
+.chat-footer {
+  padding: 16px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.chat-footer input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.chat-footer button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== Dark Mode Support ===== */
+body.dark .chat-window, 
+body.dark .chat-footer,
+body.dark .bot-tooltip { background: #1e293b; color: #f1f5f9; }
+
+body.dark .chat-body { background: #0f172a; }
+
+body.dark .chat-msg.bot { background: #334155; color: #f1f5f9; }
+
+body.dark .bot-tooltip::after { border-top-color: #1e293b; }
+
+/* ===== Animations ===== */
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Markdown Styling for Professional Response */
+.markdown-content p {
+  margin-bottom: 10px;
+}
+
+.markdown-content h3 {
+  font-size: 1rem;
+  margin: 12px 0 6px 0;
+  color: #60a5fa; /* Professional Blue */
+  border-bottom: 1px solid #334155;
+}
+
+.markdown-content ul, .markdown-content ol {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.markdown-content li {
+  margin-bottom: 5px;
+}
+
+.markdown-content strong {
+  font-weight: 700;
+  color: #93c5fd;
+}
+
+/* Optional: Typing Indicator Animation */
+.typing-loader span {
+  width: 6px; height: 6px; background: #94a3b8;
+  display: inline-block; border-radius: 50%;
+  margin: 0 2px; animation: bounce 1.3s infinite;
+}
+.typing-loader span:nth-child(2) { animation-delay: 0.15s; }
+.typing-loader span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+/* ========= Header Right ========= */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.right .icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #6366f1;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+  cursor: pointer;
+}
+
+.right .icon-btn:hover {
+  transform: translateY(-4px);
+  
+  /* 3. Visual Feedback: Slight glow or color change */
+  color: #3b3eff;
+  filter: drop-shadow(0 4px 8px rgba(80, 83, 255, 0.3));
+}
+
+

@@ -1,0 +1,284 @@
+/* ========= Full-Page Wrapper ========= */
+/* Removes arrows in Chrome, Safari, Edge, and Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Removes arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.student-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* align form to top */
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 80vh; /* account for header */
+  background: transparent;
+  transition: background 0.3s ease, color 0.3s ease;
+  margin-top: 50px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+body.dark .student-form-wrapper {
+  background: transparent;
+}
+
+/* ========= Form Card ========= */
+.student-form {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark .student-form {
+  background: #1f2937;
+  color: #f3f4f6;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* ========= Form Titles ========= */
+.student-form h2 {
+  font-size: 2rem;
+  font-weight: 1000;
+  text-align: center;
+  color: #6366f1;
+  margin-bottom: 0.5rem;
+  
+}
+
+body.dark .student-form h2 {
+  color: #f3f4f6;
+}
+
+.student-form p {
+  text-align: center;
+  color: #9495f8;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+body.dark .student-form p {
+  color: #cbd5e1;
+}
+
+/* ========= Input Grid ========= */
+.student-form .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.student-form .grid-2 input,
+.student-form .grid-2 textarea,
+.student-form .grid-2 select {
+  width: 100%; /* full width of grid cell */
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  color: #1f2937;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.student-form .grid-2 input:focus,
+.student-form .grid-2 textarea:focus,
+.student-form .grid-2 select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+
+body.dark .student-form .grid-2 input,
+body.dark .student-form .grid-2 textarea,
+body.dark .student-form .grid-2 select {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid #4b5563;
+}
+
+body.dark .student-form .grid-2 input:focus,
+body.dark .student-form .grid-2 textarea:focus,
+body.dark .student-form .grid-2 select:focus {
+  border-color: #6366f1;
+  background: #1e293b;
+}
+
+/* ========= Skills & Projects Rows ========= */
+.skill-row,
+.project-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  background: #f9fafb;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+body.dark .skill-row,
+body.dark .project-row {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+.skill-row input,
+.project-row input,
+.skill-row select,
+.project-row textarea {
+  flex: 1 1 200px;
+  min-width: 150px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1f2937;
+  transition: all 0.3s ease;
+}
+
+.project-row textarea {
+  flex: 2 1 300px;
+  min-width: 200px;
+  height: 5rem;
+  resize: none;
+}
+
+.skill-row select {
+  max-width: 180px;
+}
+
+.skill-row input:focus,
+.skill-row select:focus,
+.project-row input:focus,
+.project-row textarea:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+
+body.dark .skill-row input,
+body.dark .skill-row select,
+body.dark .project-row input,
+body.dark .project-row textarea {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid #4b5563;
+}
+
+body.dark .skill-row input:focus,
+body.dark .skill-row select:focus,
+body.dark .project-row input:focus,
+body.dark .project-row textarea:focus {
+  border-color: #6366f1;
+  background: #1e293b;
+}
+
+/* ========= Buttons ========= */
+.add-btn,
+.remove-btn,
+.submit-btn {
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-radius: 0.5rem;
+}
+
+.add-btn {
+  background: #6366f1;
+  color: #ffffff;
+  padding: 0.55rem 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.add-btn:hover {
+  background: #5053ff;
+  transform: scale(1.05);
+}
+
+.remove-btn {
+  background: #6366f1;
+  color: #ffffff;
+  padding: 0.45rem 0.85rem;
+}
+
+.remove-btn:hover {
+  background: #6366f1;
+  transform: scale(1.05);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: #6366f1;
+  color: #ffffff;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  background: #5053ff;
+}
+
+/* ========= Section Titles ========= */
+.student-form h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+body.dark .student-form h3 {
+  color: #f3f4f6;
+}
+
+/* ========= Responsive ========= */
+@media (max-width: 768px) {
+  .student-form-wrapper {
+    padding: 1.5rem;
+    align-items: stretch;
+  }
+
+  .student-form {
+    padding: 1.5rem;
+  }
+
+  .skill-row,
+  .project-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .skill-row input,
+  .skill-row select,
+  .project-row input,
+  .project-row textarea {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .skill-row .remove-btn,
+  .project-row .remove-btn {
+    align-self: flex-end;
+  }
+}
+
+

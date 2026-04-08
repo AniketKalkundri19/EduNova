@@ -1,0 +1,427 @@
+/* =======================================================
+   THEME TOKENS
+======================================================= */
+
+:root {
+  --bg-page: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-soft: #f8fafc;
+
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+
+  --border: #e2e8f0;
+
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+
+  --danger: #ef4444;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+body.dark {
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --bg-soft: #111827;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+
+  --border: #334155;
+
+  --primary: #818cf8;
+  --primary-hover: #6366f1;
+
+  --danger: #f87171;
+}
+
+/* =======================================================
+   PAGE LAYOUT
+======================================================= */
+
+.profile-page {
+  background: var(--bg-page);
+  padding: 60px 30px;
+  min-height: max-content;
+  transition: background 0.3s ease;
+}
+
+.profile-card {
+  max-width: 920px;
+  margin: auto;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+body.dark .profile-card {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+/* =======================================================
+   HEADER
+======================================================= */
+
+.profile-header {
+  padding: 36px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary-hover);
+}
+
+.profile-subtitle {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Logout Button */
+
+.btn-danger-outline {
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--danger);
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-danger-outline:hover {
+  background: var(--danger);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* =======================================================
+   ACADEMIC BAR
+======================================================= */
+
+.academic-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+}
+
+.academic-item {
+  padding: 24px 30px;
+  border-right: 1px solid var(--border);
+}
+
+.academic-item:last-child {
+  border-right: none;
+}
+
+.academic-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.academic-value {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.academic-highlight {
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+/* =======================================================
+   CONTENT
+======================================================= */
+
+.profile-content {
+  padding: 40px;
+}
+
+.section-block {
+  margin-bottom: 60px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.badge {
+  background: var(--bg-soft);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* =======================================================
+   INPUTS
+======================================================= */
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  font-weight: bold;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.input:hover,
+.textarea:hover {
+  border-color: var(--primary);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* =======================================================
+   SKILLS
+======================================================= */
+
+.skill-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.btn-danger {
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--danger);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* =======================================================
+   PROJECT CARD (ENHANCED DESIGN)
+======================================================= */
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.25s ease;
+}
+
+.project-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+body.dark .project-card:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.project-title-input {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: all 0.25s ease;
+}
+
+.project-title-input:hover {
+  border-color: var(--primary);
+}
+
+.project-title-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.btn-danger-text {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-danger-text:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Description */
+
+.textarea {
+  min-height: min-content;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  resize: none;
+  width: 80%;
+}
+
+/* =======================================================
+   BUTTONS
+======================================================= */
+
+.btn {
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-dashed {
+  width: 100%;
+  padding: 16px;
+  border: 2px dashed var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all 0.25s ease;
+}
+
+.btn-dashed:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* =======================================================
+   FOOTER
+======================================================= */
+
+.profile-footer {
+  padding: 30px 40px;
+  border-top: 1px solid var(--border);
+}
+
+/* =======================================================
+   RESPONSIVE
+======================================================= */
+
+@media (max-width: 768px) {
+
+  .academic-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .academic-item {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-row {
+    flex-direction: column;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* ================= EDITABLE ACADEMIC INPUTS ================= */
+
+.academic-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+}
+
+.academic-input:hover {
+  border-color: var(--primary);
+}
+
+.academic-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.academic-input.highlight {
+  font-weight: 800;
+  color: var(--primary);
+}
