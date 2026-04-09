@@ -114,7 +114,7 @@ const StudentDetailForm = ({ onSubmit }) => {
               <option>Intermediate</option>
               <option>Expert</option>
             </select>
-            <button type="button" onClick={() => removeCustomSkill(idx)}>✕</button>
+            <button type="button" className="remove-btn" onClick={() => removeCustomSkill(idx)}>✕</button>
           </div>
         ))}
         <button type="button" className="add-btn" onClick={addCustomSkill}>+ Add Skill</button>
