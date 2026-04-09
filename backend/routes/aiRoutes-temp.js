@@ -32,14 +32,14 @@ const upload = multer({ storage });
 /* ============================
    AXIOS CONFIG
    ============================ */
-const getAxiosConfig = (formDataHeaders = {}) => ({
+const axiosConfig = (formDataHeaders = {}) => ({
   headers: {
     Authorization: `Bearer ${HF_TOKEN}`,
-    "x-wait-for-model": "true",
-    "x-use-cache": "false",
+    "x-wait-for-model": "true", // 🚀 CRITICAL: Forces HF to wake up the space instead of erroring
+    "x-use-cache": "false",      // Ensures you get fresh AI results
     ...formDataHeaders,
   },
-  timeout: 90000,
+  timeout: 60000, // ⏳ Give the AI 60 seconds to process (PDFs are heavy!)
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
 });
