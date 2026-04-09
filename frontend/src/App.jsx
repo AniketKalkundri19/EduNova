@@ -8,7 +8,7 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import SkillGapAnalyzer from "./components/SkillGapAnalyzer";
 import ResumeEnhancer from "./components/ResumeEnhancer";
-import StudentDetailsForm from "./components/StudentDetailForm";
+import StudentDetailForm from "./components/StudentDetailForm";
 import NovaBot from "./components/Novabot";
 import AuthPage from "./components/AuthPage";
 import Landing from "./components/Landing";
