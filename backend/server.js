@@ -14,7 +14,7 @@ const app = express();
 // --- LIVE PRODUCTION CONFIGURATION ---
 const allowedOrigins = [
     "http://localhost:5173",                             // Local development
-    "https://edu-nova-frontend-tau.vercel.app",          // Your Actual Vercel URL
+    "https://edunova-eta-flax.vercel.app/",          // Your Actual Vercel URL
 ];
 
 app.use(cors({
