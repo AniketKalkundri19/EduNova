@@ -14,8 +14,8 @@ const app = express();
 // --- LIVE PRODUCTION CONFIGURATION ---
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://edunova-eta-flax.vercel.app", // ✅ FIXED: Removed the trailing slash
-    "https://edu-nova-frontend-tau.vercel.app" 
+    "https://edunova-eta-flax.vercel.app"// ✅ FIXED: Removed the trailing slash
+   
 ];
 
 app.use(cors({
