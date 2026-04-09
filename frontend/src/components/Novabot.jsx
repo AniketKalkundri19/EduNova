@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FaRobot, FaTimes } from "react-icons/fa";
-import ReactMarkdown from "react-markdown"; // 1. Added Markdown support
+import ReactMarkdown from "react-markdown";
+
+// 🚀 FIXED: Dynamic URL for Production
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
 
 const NovaBot = ({ user }) => {
   const [open, setOpen] = useState(false);
@@ -56,7 +59,8 @@ const NovaBot = ({ user }) => {
     try {
       abortControllerRef.current = new AbortController();
 
-      const response = await fetch("http://localhost:5000/api/ai/chat", {
+      // ✅ CHANGED: Now using API_BASE_URL
+      const response = await fetch(`${API_BASE_URL}/api/ai/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: abortControllerRef.current.signal,
@@ -124,7 +128,6 @@ const NovaBot = ({ user }) => {
 
             {messages.map((msg, idx) => (
               <div key={idx} className={`chat-msg ${msg.from}`}>
-                {/* 2. Professional Formatting Logic */}
                 {msg.from === "bot" ? (
                   <div className="markdown-content">
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
