@@ -11,25 +11,28 @@ connectDB();
 
 const app = express();
 
-// --- MODIFIED CORS SECTION ---
+// --- LIVE PRODUCTION CONFIGURATION ---
 const allowedOrigins = [
-    "http://localhost:5173",                     // Local development
-    "https://your-edunova-frontend.vercel.app",  // Add your Vercel/Netlify URL here
-    "https://your-custom-domain.com"             // If you have a custom domain
+    "http://localhost:5173",                             // Local development
+    "https://edu-nova-frontend-tau.vercel.app",          // Your Actual Vercel URL
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
+        
+        // Check if the requesting site is in our allowed list
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            console.log("Blocked by CORS:", origin);
             return callback(new Error("CORS policy blocked this origin"), false);
         }
-        return callback(null, true);
     },
     credentials: true,
 }));
-// -----------------------------
+// -------------------------------------
 
 app.use(express.json());
 
@@ -38,7 +41,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/ai", aiRoutes);
 
-// Root route for health check (useful for Render/Railway)
 app.get("/", (req, res) => {
     res.send("EduNova API is running...");
 });
