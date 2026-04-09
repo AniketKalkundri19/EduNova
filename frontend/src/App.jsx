@@ -33,6 +33,8 @@ const PageTransition = ({ children, keyProp }) => (
   </motion.div>
 );
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
+
 function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -43,7 +45,7 @@ function App() {
   /* ================= FETCH STUDENT ================= */
   const fetchStudentProfile = async (userId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/student/${userId}`);
+      const res = await fetch(`${API_BASE_URL}/api/student/${userId}`);
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Fetch failed");
       return await res.json();
