@@ -39,7 +39,7 @@ const axiosConfig = (formDataHeaders = {}) => ({
     "x-use-cache": "false",      // Ensures you get fresh AI results
     ...formDataHeaders,
   },
-  timeout: 60000, // ⏳ Give the AI 60 seconds to process (PDFs are heavy!)
+  timeout: 90000, // ⏳ Give the AI 60 seconds to process (PDFs are heavy!)
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
 });
