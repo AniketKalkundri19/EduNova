@@ -134,7 +134,7 @@ function App() {
     // 1. Handle Pre-Auth Screens (No transitions usually needed for these major shifts)
     if (showLanding) return <Landing onGetStarted={handleGetStarted} />;
     if (!isAuthenticated) return <AuthPage onAuthSuccess={handleAuthSuccess} />;
-    if (userDetails?.isNewUser) return <StudentDetailsForm onSubmit={handleProfileSubmit} />;
+    if (userDetails?.isNewUser) return <StudentDetailForm onSubmit={handleProfileSubmit} />;
     
 
     // 2. Handle Main Dashboard Navigation (With Transitions)
