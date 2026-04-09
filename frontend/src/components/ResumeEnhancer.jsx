@@ -136,7 +136,7 @@ const ResumeEnhancer = ({ user }) => {
             {loading ? (
               <Loader2 className="spin" size={20} />
             ) : (
-              <><Sparkles size={18} /> Generate AI Profile Audit</>
+              <><Sparkles size={18} /> Generate Resume Audit</>
             )}
           </button>
         </main>
