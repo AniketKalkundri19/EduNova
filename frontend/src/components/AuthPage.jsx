@@ -5,6 +5,9 @@ import { toast } from "react-hot-toast";
 import { FaRocket } from "react-icons/fa";
 import "../style/AuthPage.css";
 
+// 🚀 Dynamically switches between your Render backend and localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
+
 const AuthPage = ({ onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,7 +31,8 @@ const AuthPage = ({ onAuthSuccess }) => {
     const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
 
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      // ✅ FIXED: Using API_BASE_URL instead of http://localhost:5000
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -43,15 +47,15 @@ const AuthPage = ({ onAuthSuccess }) => {
 
       toast.success(data.message);
 
-      // ✅ 1. SAVE USER ID, NAME, & JWT TOKEN
+      // SAVE USER ID, NAME, & JWT TOKEN
       localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("userName", data.user.name); // 🔑 THIS FIXES THE "GUEST" BUG
+      localStorage.setItem("userName", data.user.name); 
       
       if (data.token) {
         localStorage.setItem("edu_token", data.token);
       }
 
-      // ✅ 2. THE GOOGLE PASSWORD MANAGER TRIGGER
+      // THE GOOGLE PASSWORD MANAGER TRIGGER
       if (window.PasswordCredential && navigator.credentials) {
         const cred = new PasswordCredential({
           id: formData.email,
@@ -64,7 +68,7 @@ const AuthPage = ({ onAuthSuccess }) => {
           .catch((err) => console.log("Browser rejected the prompt:", err));
       }
 
-      // ✅ 3. THE 400ms DELAY (Prevents React from destroying the form too fast)
+      // THE 400ms DELAY
       setTimeout(() => {
         onAuthSuccess({
           ...data.user,
@@ -73,28 +77,26 @@ const AuthPage = ({ onAuthSuccess }) => {
       }, 400);
 
     } catch (error) {
-      toast.error("Server error. Please try again.");
-      console.error(error);
+      // This toast triggers if the URL is wrong or the server is down
+      toast.error("Server connection failed. Checking connection...");
+      console.error("Connection Error:", error);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-
         {/* LEFT */}
         <div className="auth-left">
           <h2 className="auth-title">
             {isLogin ? "Welcome Back 👋" : "Join EduNova 🚀"}
           </h2>
-
           <p className="auth-subtitle">
             {isLogin
               ? "Login to access your personalized student dashboard."
               : "Create your account and unlock smart AI-powered learning!"}
           </p>
 
-          {/* Added action="#" as a fallback for strict browsers */}
           <form action="#" onSubmit={handleSubmit} className="auth-form">
             {!isLogin && (
               <input
@@ -104,7 +106,7 @@ const AuthPage = ({ onAuthSuccess }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                autoComplete="name" // Let browser know this is a name field
+                autoComplete="name"
               />
             )}
 
@@ -115,7 +117,7 @@ const AuthPage = ({ onAuthSuccess }) => {
               value={formData.email}
               onChange={handleChange}
               required
-              autoComplete="username" // Crucial: Tells the browser this is the login ID
+              autoComplete="username"
             />
 
             <input
@@ -125,7 +127,6 @@ const AuthPage = ({ onAuthSuccess }) => {
               value={formData.password}
               onChange={handleChange}
               required
-              // Crucial: Differentiates between updating an old password vs making a new one
               autoComplete={isLogin ? "current-password" : "new-password"} 
             />
 
@@ -161,7 +162,6 @@ const AuthPage = ({ onAuthSuccess }) => {
             </motion.p>
           </motion.div>
         </div>
-
       </div>
     </div>
   );
