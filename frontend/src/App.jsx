@@ -8,7 +8,7 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import SkillGapAnalyzer from "./components/SkillGapAnalyzer";
 import ResumeEnhancer from "./components/ResumeEnhancer";
-import StudentDetailForm from "./components/StudentDetailForm";
+import StudentDetailForm from "./components/StudentDetailForm"; // Import name matches file
 import NovaBot from "./components/Novabot";
 import AuthPage from "./components/AuthPage";
 import Landing from "./components/Landing";
@@ -18,8 +18,9 @@ import About from "./components/About";
 import "./style/styles.css";
 import "./style/Dashboard.css";
 
+/* ================= API CONFIG ================= */
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
 
-/* ================= TRANSITION COMPONENT ================= */
 const PageTransition = ({ children, keyProp }) => (
   <motion.div
     key={keyProp}
@@ -33,8 +34,6 @@ const PageTransition = ({ children, keyProp }) => (
   </motion.div>
 );
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
-
 function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,7 +41,6 @@ function App() {
   const [activePage, setActivePage] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
 
-  /* ================= FETCH STUDENT ================= */
   const fetchStudentProfile = async (userId) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/student/${userId}`);
@@ -54,51 +52,38 @@ function App() {
     }
   };
 
-  /* ================= INIT ================= */
-  /* ================= INIT (AUTO-LOGIN) ================= */
   useEffect(() => {
     const checkAuthStatus = async () => {
       const savedToken = localStorage.getItem("edu_token");
       const savedUserId = localStorage.getItem("userId");
-      const savedUserName = localStorage.getItem("userName"); // 🔑 Grab the name!
+      const savedUserName = localStorage.getItem("userName");
 
       if (savedToken && savedUserId) {
         try {
           const student = await fetchStudentProfile(savedUserId);
-
           if (student) {
-            // 🔑 Inject the savedUserName here
             setUserDetails({ id: savedUserId, name: savedUserName, ...student, isNewUser: false });
           } else {
-            // 🔑 Inject the savedUserName here too
             setUserDetails({ id: savedUserId, name: savedUserName, isNewUser: true });
           }
-
           setIsAuthenticated(true);
           setShowLanding(false); 
         } catch (error) {
           console.error("Auto-login failed:", error);
-          localStorage.removeItem("edu_token");
-          localStorage.removeItem("userId");
-          localStorage.removeItem("userName"); // 🔑 clear bad data
+          localStorage.clear();
         }
       }
-      
       setLoading(false);
     };
-
     checkAuthStatus();
   }, []);
 
   const handleGetStarted = () => setShowLanding(false);
 
-  /* ================= AUTH SUCCESS ================= */
   const handleAuthSuccess = async (userData) => {
     setIsAuthenticated(true);
     localStorage.setItem("userId", userData.id);
-
     const student = await fetchStudentProfile(userData.id);
-
     if (student) {
       setUserDetails({ ...userData, ...student, isNewUser: false });
     } else {
@@ -106,7 +91,6 @@ function App() {
     }
   };
 
-  /* ================= STUDENT FORM SUBMIT ================= */
   const handleProfileSubmit = (studentFromDB) => {
     setUserDetails((prev) => ({
       ...prev,
@@ -115,54 +99,41 @@ function App() {
     }));
   };
 
-  /* ================= LOGOUT ================= */
-  /* ================= LOGOUT ================= */
-    const handleLogout = () => {
-        localStorage.removeItem("edu_token"); // ✅ Clear token
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userName");    // ✅ Clear ID
-        setIsAuthenticated(false);
-        setUserDetails(null);
-        setShowLanding(true);
-        setActivePage("Dashboard");
-      };
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsAuthenticated(false);
+    setUserDetails(null);
+    setShowLanding(true);
+    setActivePage("Dashboard");
+  };
 
   if (loading) return null;
 
-  /* ================= RENDER LOGIC ================= */
   const renderContent = () => {
-    // 1. Handle Pre-Auth Screens (No transitions usually needed for these major shifts)
     if (showLanding) return <Landing onGetStarted={handleGetStarted} />;
     if (!isAuthenticated) return <AuthPage onAuthSuccess={handleAuthSuccess} />;
-    if (userDetails?.isNewUser) return <StudentDetailForm onSubmit={handleProfileSubmit} />;
     
+    // Fix: Using the exact import name 'StudentDetailForm'
+    if (userDetails?.isNewUser) return <StudentDetailForm onSubmit={handleProfileSubmit} />;
 
-    // 2. Handle Main Dashboard Navigation (With Transitions)
     return (
       <AnimatePresence mode="wait">
         <PageTransition keyProp={activePage}>
           {(() => {
             switch (activePage) {
-              case "Dashboard":
-                return <Dashboard user={userDetails} />;
-              case "SkillGapAnalyzer":
-                return <SkillGapAnalyzer user={userDetails} />;
-              case "ResumeEnhancer":
-                return <ResumeEnhancer user={userDetails} />;
-              case "About": // ✅ ADD THIS CASE
-                return <About />;
+              case "Dashboard": return <Dashboard user={userDetails} />;
+              case "SkillGapAnalyzer": return <SkillGapAnalyzer user={userDetails} />;
+              case "ResumeEnhancer": return <ResumeEnhancer user={userDetails} />;
+              case "About": return <About />;
               case "Profile":
                 return (
                   <Profile
                     user={userDetails}
-                    onProfileUpdate={(updated) =>
-                      setUserDetails((prev) => ({ ...prev, ...updated }))
-                    }
+                    onProfileUpdate={(updated) => setUserDetails((prev) => ({ ...prev, ...updated }))}
                     onLogout={handleLogout}
                   />
                 );
-              default:
-                return <Dashboard user={userDetails} />;
+              default: return <Dashboard user={userDetails} />;
             }
           })()}
         </PageTransition>
@@ -175,29 +146,22 @@ function App() {
   return (
     <ThemeProvider>
       <Toaster position="top-center" />
-
       <Header
         user={showFullLayout ? userDetails : null}
         onProfileClick={() => setActivePage("Profile")}
-        onLogoClick={() => setActivePage("About")} // ✅ This triggers the switch
+        onLogoClick={() => setActivePage("About")}
         onLogout={handleLogout}
       />
-
       <div className={`layout ${showFullLayout ? "full-layout" : "center-layout"}`}>
-        {showFullLayout && (
-          <Sidebar activePage={activePage} setActivePage={setActivePage} />
-        )}
+        {showFullLayout && <Sidebar activePage={activePage} setActivePage={setActivePage} />}
         <main className="main-content">
           {renderContent()}
           <footer className="landing-footer">
-    <p>© {new Date().getFullYear()} EduNova • Empowering Students with AI</p>
-  </footer>
+            <p>© {new Date().getFullYear()} EduNova • Empowering Students with AI</p>
+          </footer>
         </main>
       </div>
-
-      {showFullLayout && <Novabot user={userDetails} />}
-
-
+      {showFullLayout && <NovaBot user={userDetails} />}
     </ThemeProvider>
   );
 }
