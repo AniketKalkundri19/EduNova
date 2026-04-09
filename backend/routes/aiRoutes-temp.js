@@ -9,42 +9,62 @@ const router = express.Router();
 
 const { HF_TOKEN, AI_BACKEND_URL } = process.env;
 
+/* ============================
+   🔍 ENV VALIDATION (CRITICAL)
+   ============================ */
+if (!HF_TOKEN || !AI_BACKEND_URL) {
+  console.error("❌ ENV ERROR:");
+  console.error("HF_TOKEN:", HF_TOKEN ? "✅ Present" : "❌ Missing");
+  console.error("AI_BACKEND_URL:", AI_BACKEND_URL || "❌ Missing");
+
+  throw new Error("Missing required environment variables");
+} else {
+  console.log("✅ ENV Loaded:");
+  console.log("AI_BACKEND_URL:", AI_BACKEND_URL);
+}
+
+/* ============================
+   MULTER SETUP
+   ============================ */
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// 🚀 Helper: Centralized Axios Config to handle Hugging Face "Cold Starts"
+/* ============================
+   AXIOS CONFIG
+   ============================ */
 const getAxiosConfig = (formDataHeaders = {}) => ({
   headers: {
     Authorization: `Bearer ${HF_TOKEN}`,
-    "x-wait-for-model": "true", // ✅ Forces HF to wake up the space instead of 500 error
+    "x-wait-for-model": "true",
     "x-use-cache": "false",
     ...formDataHeaders,
   },
-  timeout: 90000, // ⏳ AI processing takes time; increased to 90 seconds
+  timeout: 90000,
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
 });
 
 /* ============================
-    TOOL 1: NOVABOT CHAT
+   TOOL 1: NOVABOT CHAT
    ============================ */
 router.post("/chat", async (req, res) => {
   try {
+    console.log("➡️ /chat called");
+
     const { name, history, profile } = req.body;
 
-    const systemIdentity = `SYSTEM NOTE: You are NovaBot, a professional academic mentor. 
-You have access to ${name}'s verified database.
-DB RECORD:
+    if (!profile) {
+      return res.status(400).json({ error: "Profile missing" });
+    }
+
+    const systemIdentity = `SYSTEM NOTE: You are NovaBot...
 - Degree: ${profile.degree}
 - Year: ${profile.currentYear}
 - CGPA: ${profile.cgpa}
 - Skills: ${profile.skills?.join(", ") || "None listed"}
-- Projects: ${profile.projects?.join(", ") || "None started"}
+- Projects: ${profile.projects?.join(", ") || "None started"}`;
 
-FORMATTING RULES:
-1. Use **bolding** for key terms.
-2. Use ### for section headers.
-3. Use bullet points for lists.`;
+    console.log("📡 Calling AI:", `${AI_BACKEND_URL}/novabot-chat`);
 
     const response = await axios.post(
       `${AI_BACKEND_URL}/novabot-chat`,
@@ -53,7 +73,7 @@ FORMATTING RULES:
         goals: [`Guidance for ${profile.degree}`, ...(profile.skills || [])],
         history: [
           { role: "user", content: systemIdentity },
-          { role: "assistant", content: "Profile synced. I am ready to assist." },
+          { role: "assistant", content: "Profile synced." },
           ...(history || [])
         ]
       },
@@ -62,28 +82,46 @@ FORMATTING RULES:
 
     res.json(response.data);
   } catch (error) {
-    console.error("NovaBot Error:", error.response?.data || error.message);
-    res.status(500).json({ success: false, error: "NovaBot is temporarily resting." });
+    console.error("❌ NovaBot Error FULL:", {
+      message: error.message,
+      data: error.response?.data,
+      status: error.response?.status
+    });
+
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
   }
 });
 
 /* ============================
-    TOOL 2: SKILL GAP ANALYZER
+   TOOL 2: SKILL GAP
    ============================ */
 router.post("/skill-gap", upload.single("resume"), async (req, res) => {
   try {
+    console.log("➡️ /skill-gap called");
+
     const { job_description, profile_json } = req.body;
+
+    if (!job_description) {
+      return res.status(400).json({ error: "Job description missing" });
+    }
 
     const formData = new FormData();
     formData.append("job_description", job_description);
-    formData.append("profile_json", profile_json);
+    formData.append("profile_json", profile_json || "{}");
 
     if (req.file) {
+      console.log("📄 Resume received:", req.file.originalname);
+
       formData.append("resume", req.file.buffer, {
         filename: req.file.originalname,
         contentType: req.file.mimetype,
       });
     }
+
+    console.log("📡 Calling AI:", `${AI_BACKEND_URL}/skill-gap`);
 
     const response = await axios.post(
       `${AI_BACKEND_URL}/skill-gap`,
@@ -93,20 +131,30 @@ router.post("/skill-gap", upload.single("resume"), async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("SkillGap Error:", error.response?.data || error.message);
-    res.status(500).json({ success: false, error: "Analysis failed." });
+    console.error("❌ SkillGap Error FULL:", {
+      message: error.message,
+      data: error.response?.data,
+      status: error.response?.status
+    });
+
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
   }
 });
 
 /* ============================
-    TOOL 3: RESUME ENHANCER
+   TOOL 3: RESUME ENHANCER
    ============================ */
 router.post("/enhance-resume", upload.single("resume"), async (req, res) => {
   try {
+    console.log("➡️ /enhance-resume called");
+
     const { job_description, profile_json } = req.body;
 
     if (!req.file) {
-      return res.status(400).json({ success: false, error: "Resume file is required." });
+      return res.status(400).json({ error: "Resume file required" });
     }
 
     const formData = new FormData();
@@ -118,6 +166,8 @@ router.post("/enhance-resume", upload.single("resume"), async (req, res) => {
     formData.append("job_description", job_description || "");
     formData.append("profile_json", profile_json || "{}");
 
+    console.log("📡 Calling AI:", `${AI_BACKEND_URL}/enhance-resume`);
+
     const response = await axios.post(
       `${AI_BACKEND_URL}/enhance-resume`,
       formData,
@@ -126,8 +176,16 @@ router.post("/enhance-resume", upload.single("resume"), async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("ResumeEnhancer Error:", error.response?.data || error.message);
-    res.status(500).json({ success: false, error: "Resume enhancement failed." });
+    console.error("❌ ResumeEnhancer Error FULL:", {
+      message: error.message,
+      data: error.response?.data,
+      status: error.response?.status
+    });
+
+    res.status(500).json({
+      success: false,
+      error: error.response?.data || error.message
+    });
   }
 });
 
