@@ -6,6 +6,9 @@ import {
 } from "lucide-react";
 import "../style/SkillGap.css";
 
+// 🚀 FIXED: Dynamic URL to support both Production (Render) and Local Development
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
+
 const SkillGapAnalyzer = ({ user }) => {
   const [jd, setJd] = useState("");
   const [resume, setResume] = useState(null);
@@ -30,7 +33,6 @@ const SkillGapAnalyzer = ({ user }) => {
     "Finalizing your personalized skill-readiness dashboard..."
   ];
 
-  // 1. Staged Loading Logic
   useEffect(() => {
     let interval;
     if (loading) {
@@ -43,7 +45,6 @@ const SkillGapAnalyzer = ({ user }) => {
     return () => clearInterval(interval);
   }, [loading]);
 
-  // 2. Ultra-safe Autoscroll logic
   useEffect(() => {
     if (result && resultsRef.current) {
       const score = parseFloat(result.match_score) || 0;
@@ -62,6 +63,7 @@ const SkillGapAnalyzer = ({ user }) => {
   }, [result]);
 
   const highlightTech = (text) => {
+    if (!text) return "";
     const words = text.split(" ");
     return words.map((word, i) => {
       const isTech = /^[A-Z]/.test(word) || word.includes('.') || word.includes('/');
@@ -95,10 +97,10 @@ const SkillGapAnalyzer = ({ user }) => {
     formData.append("profile_json", JSON.stringify(profile));
 
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/skill-gap", formData);
+      // ✅ CHANGED: Now calling the hosted API_BASE_URL instead of localhost
+      const res = await axios.post(`${API_BASE_URL}/api/ai/skill-gap`, formData);
       let data = res.data;
 
-      // FIXED: String cleanup to strictly remove hanging brackets
       if (typeof data.missing_skills === "string") {
         const lines = data.missing_skills.split("\n").map(l => l.trim()).filter(Boolean);
         let extracted = lines.map(line => {
@@ -111,7 +113,8 @@ const SkillGapAnalyzer = ({ user }) => {
       }
       setResult(data);
     } catch (err) {
-      setError("Diagnostic analysis failed. Please try again.");
+      console.error("Diagnostic error:", err);
+      setError("Diagnostic analysis failed. Check your connection to the AI service.");
     } finally {
       setLoading(false);
     }
@@ -125,7 +128,6 @@ const SkillGapAnalyzer = ({ user }) => {
     <div className="edu-sg-scope">
       <div className="sg-wrapper">
         
-        {/* Elite Match Overlay */}
         {isPerfect && (
           <div className="sg-success-overlay">
             <div className="sg-success-modal animate-popIn">
@@ -162,7 +164,6 @@ const SkillGapAnalyzer = ({ user }) => {
             <section className="sg-workspace-card">
               <div className="sg-input-grid">
                 
-                {/* Scanner Upload Zone */}
                 <div className="input-group">
                   <div className={`sg-upload-zone ${resume ? 'active' : ''} ${loading ? 'scanning' : ''}`}>
                     <input 
@@ -186,7 +187,6 @@ const SkillGapAnalyzer = ({ user }) => {
                   </div>
                 </div>
 
-                {/* JD Area - Fixed Size */}
                 <div className="input-group">
                   <textarea
                     ref={textareaRef}
@@ -204,7 +204,6 @@ const SkillGapAnalyzer = ({ user }) => {
               </button>
             </section>
 
-            {/* Staged Loading Indicator */}
             {loading && (
               <div className="sg-status-box animate-popIn">
                 <Zap size={18} className="pulse-icon" />
@@ -219,7 +218,6 @@ const SkillGapAnalyzer = ({ user }) => {
               </div>
             )}
 
-            {/* --- TWO-COLUMN RESPONSE UI --- */}
             {result && !isPerfect && (
               <section ref={resultsRef} className="sg-report-container animate-popIn">
                 <div className="report-header">
@@ -227,15 +225,13 @@ const SkillGapAnalyzer = ({ user }) => {
                 </div>
                 
                 <div className="report-layout">
-                  {/* Left Column: AI Reasoning/Summary */}
                   <div className="report-summary-box">
                     <h3 className="section-subtitle">AI Executive Summary</h3>
                     <div className="ai-description-text">
-                      {highlightTech(result.analysis_summary || "Scanning complete. We've identified key areas where your profile can be strengthened to meet the specific demands of this role.")}
+                      {highlightTech(result.analysis_summary || "Scanning complete.")}
                     </div>
                   </div>
 
-                  {/* Right Column: Metrics & Gaps */}
                   <div className="report-metrics-box">
                     <div className="score-overview-v2">
                       <div className="score-circle-mini">
