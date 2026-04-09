@@ -13,24 +13,32 @@ const app = express();
 
 // --- LIVE PRODUCTION CONFIGURATION ---
 const allowedOrigins = [
-    "http://localhost:5173",                             // Local development
-    "https://edunova-eta-flax.vercel.app/",          // Your Actual Vercel URL
+    "http://localhost:5173",
+    "https://edunova-eta-flax.vercel.app", // ✅ FIXED: Removed the trailing slash
+    "https://edu-nova-frontend-tau.vercel.app" 
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl)
+        // 1. Allow internal requests/mobile/Postman
         if (!origin) return callback(null, true);
         
-        // Check if the requesting site is in our allowed list
+        // 2. Exact match check
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
-        } else {
-            console.log("Blocked by CORS:", origin);
-            return callback(new Error("CORS policy blocked this origin"), false);
+        } 
+        
+        // 3. Pattern match check (Optional: Allows all Vercel subdomains for your project)
+        if (origin.endsWith(".vercel.app") && origin.includes("edunova")) {
+            return callback(null, true);
         }
+
+        console.log("❌ Blocked by CORS:", origin);
+        return callback(new Error("CORS policy blocked this origin"), false);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 // -------------------------------------
 
