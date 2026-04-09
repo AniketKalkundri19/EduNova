@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import "../style/StudentFormDetails.css";
 
-const StudentDetailsForm = ({ onSubmit }) => {
+const StudentDetailForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     degree: "",
     currentYear: "",
