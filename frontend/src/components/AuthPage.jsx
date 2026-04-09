@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast"; 
-import { FaRocket } from "react-icons/fa";
+import { FaRocket, FaSpinner } from "react-icons/fa"; // Added FaSpinner
 import "../style/AuthPage.css";
 
-// 🚀 Dynamically switches between your Render backend and localhost
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
 
 const AuthPage = ({ onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLoading] = useState(false); // New Loading State
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,11 +27,11 @@ const AuthPage = ({ onAuthSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start Loading
 
     const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
 
     try {
-      // ✅ FIXED: Using API_BASE_URL instead of http://localhost:5000
       const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -42,12 +42,12 @@ const AuthPage = ({ onAuthSuccess }) => {
 
       if (!res.ok) {
         toast.error(data.message || "Authentication failed!");
+        setLoading(false); // Stop Loading on error
         return;
       }
 
       toast.success(data.message);
 
-      // SAVE USER ID, NAME, & JWT TOKEN
       localStorage.setItem("userId", data.user.id);
       localStorage.setItem("userName", data.user.name); 
       
@@ -55,7 +55,6 @@ const AuthPage = ({ onAuthSuccess }) => {
         localStorage.setItem("edu_token", data.token);
       }
 
-      // THE GOOGLE PASSWORD MANAGER TRIGGER
       if (window.PasswordCredential && navigator.credentials) {
         const cred = new PasswordCredential({
           id: formData.email,
@@ -68,8 +67,8 @@ const AuthPage = ({ onAuthSuccess }) => {
           .catch((err) => console.log("Browser rejected the prompt:", err));
       }
 
-      // THE 400ms DELAY
       setTimeout(() => {
+        setLoading(false); // Stop Loading before moving to dashboard
         onAuthSuccess({
           ...data.user,
           isNewUser: !isLogin, 
@@ -77,7 +76,7 @@ const AuthPage = ({ onAuthSuccess }) => {
       }, 400);
 
     } catch (error) {
-      // This toast triggers if the URL is wrong or the server is down
+      setLoading(false); // Stop Loading on crash
       toast.error("Server connection failed. Checking connection...");
       console.error("Connection Error:", error);
     }
@@ -86,7 +85,6 @@ const AuthPage = ({ onAuthSuccess }) => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        {/* LEFT */}
         <div className="auth-left">
           <h2 className="auth-title">
             {isLogin ? "Welcome Back 👋" : "Join EduNova 🚀"}
@@ -107,6 +105,7 @@ const AuthPage = ({ onAuthSuccess }) => {
                 onChange={handleChange}
                 required
                 autoComplete="name"
+                disabled={loading} // Disable during loading
               />
             )}
 
@@ -118,6 +117,7 @@ const AuthPage = ({ onAuthSuccess }) => {
               onChange={handleChange}
               required
               autoComplete="username"
+              disabled={loading} // Disable during loading
             />
 
             <input
@@ -128,22 +128,26 @@ const AuthPage = ({ onAuthSuccess }) => {
               onChange={handleChange}
               required
               autoComplete={isLogin ? "current-password" : "new-password"} 
+              disabled={loading} // Disable during loading
             />
 
-            <button type="submit" className="auth-button">
-              {isLogin ? "Login" : "Sign Up"}
+            <button type="submit" className="auth-button" disabled={loading}>
+              {loading ? (
+                <FaSpinner className="spinner-icon" />
+              ) : (
+                isLogin ? "Login" : "Sign Up"
+              )}
             </button>
           </form>
 
           <p className="auth-toggle">
             {isLogin ? "New here?" : "Already have an account?"}{" "}
-            <span onClick={() => setIsLogin(!isLogin)}>
+            <span onClick={() => !loading && setIsLogin(!isLogin)}>
               {isLogin ? "Create an account" : "Login"}
             </span>
           </p>
         </div>
 
-        {/* RIGHT */}
         <div className="auth-right">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
