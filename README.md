@@ -51,7 +51,7 @@ The project uses a **layered microservices approach** to keep the core app fast 
 EduNova/
 ├── backend/ (Node.js)      # Student & User Schemas, JWT Auth
 ├── frontend/ (React)       # UI Dashboard & NovaBot Interface
-└── ai-gateway/ (Python)    # LLM logic & Vector Embeddings
+└── ai-gateway/ (Python)    # LLM logic & Vector Embeddings (API Hosted Directly folder not commited here)
 ```
 
 ---
