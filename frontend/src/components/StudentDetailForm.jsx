@@ -124,7 +124,7 @@ const StudentDetailForm = ({ onSubmit }) => {
           <div key={idx} className="project-row">
             <input type="text" placeholder="Title" value={project.title} onChange={(e) => changeProject(idx, "title", e.target.value)} />
             <textarea placeholder="Description" value={project.description} onChange={(e) => changeProject(idx, "description", e.target.value)} />
-            <button type="button" className="remove-btn" onClick={() => removeProject(idx)}>Remove</button>
+            <button type="button" className="remove-btn" onClick={() => removeProject(idx)}>✕</button>
           </div>
         ))}
         <button type="button" className="add-btn" onClick={addProject}>+ Add Project</button>
