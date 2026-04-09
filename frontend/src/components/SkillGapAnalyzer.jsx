@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import "../style/SkillGap.css";
 
-// 🚀 FIXED: Dynamic URL to support both Production (Render) and Local Development
+// 🚀 FIXED: Support for both Production (Render) and Localhost
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
 
 const SkillGapAnalyzer = ({ user }) => {
@@ -97,8 +97,11 @@ const SkillGapAnalyzer = ({ user }) => {
     formData.append("profile_json", JSON.stringify(profile));
 
     try {
-      // ✅ CHANGED: Now calling the hosted API_BASE_URL instead of localhost
-      const res = await axios.post(`${API_BASE_URL}/api/ai/skill-gap`, formData);
+      // ✅ CHANGED: Replaced localhost with API_BASE_URL
+      const res = await axios.post(`${API_BASE_URL}/api/ai/skill-gap`, formData, {
+        withCredentials: true // Important for maintaining session if needed
+      });
+      
       let data = res.data;
 
       if (typeof data.missing_skills === "string") {
