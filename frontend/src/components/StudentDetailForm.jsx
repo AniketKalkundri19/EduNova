@@ -219,4 +219,4 @@ const StudentDetailForm = ({ onSubmit }) => {
   );
 };
 
-export default StudentDetailsForm;
+export default StudentDetailForm;
