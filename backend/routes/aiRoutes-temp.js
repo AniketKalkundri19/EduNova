@@ -12,15 +12,15 @@ const { HF_TOKEN, AI_BACKEND_URL } = process.env;
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Common Axios Config to prevent 500/Timeout errors on Hugging Face
-const axiosConfig = (formDataHeaders = {}) => ({
+// 🚀 Helper: Centralized Axios Config to handle Hugging Face "Cold Starts"
+const getAxiosConfig = (formDataHeaders = {}) => ({
   headers: {
     Authorization: `Bearer ${HF_TOKEN}`,
-    "x-wait-for-model": "true", // 🚀 CRITICAL: Forces HF to wake up the space
+    "x-wait-for-model": "true", // ✅ Forces HF to wake up the space instead of 500 error
     "x-use-cache": "false",
     ...formDataHeaders,
   },
-  timeout: 90000, // ⏳ Increase timeout to 90s (AI takes time to process)
+  timeout: 90000, // ⏳ AI processing takes time; increased to 90 seconds
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
 });
@@ -57,7 +57,7 @@ FORMATTING RULES:
           ...(history || [])
         ]
       },
-      axiosConfig()
+      getAxiosConfig()
     );
 
     res.json(response.data);
@@ -73,6 +73,7 @@ FORMATTING RULES:
 router.post("/skill-gap", upload.single("resume"), async (req, res) => {
   try {
     const { job_description, profile_json } = req.body;
+
     const formData = new FormData();
     formData.append("job_description", job_description);
     formData.append("profile_json", profile_json);
@@ -87,7 +88,7 @@ router.post("/skill-gap", upload.single("resume"), async (req, res) => {
     const response = await axios.post(
       `${AI_BACKEND_URL}/skill-gap`,
       formData,
-      axiosConfig(formData.getHeaders())
+      getAxiosConfig(formData.getHeaders())
     );
 
     res.json(response.data);
@@ -103,20 +104,24 @@ router.post("/skill-gap", upload.single("resume"), async (req, res) => {
 router.post("/enhance-resume", upload.single("resume"), async (req, res) => {
   try {
     const { job_description, profile_json } = req.body;
-    if (!req.file) return res.status(400).json({ success: false, error: "Resume file is required." });
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: "Resume file is required." });
+    }
 
     const formData = new FormData();
     formData.append("resume", req.file.buffer, {
       filename: req.file.originalname,
       contentType: req.file.mimetype,
     });
+
     formData.append("job_description", job_description || "");
     formData.append("profile_json", profile_json || "{}");
 
     const response = await axios.post(
       `${AI_BACKEND_URL}/enhance-resume`,
       formData,
-      axiosConfig(formData.getHeaders())
+      getAxiosConfig(formData.getHeaders())
     );
 
     res.json(response.data);
