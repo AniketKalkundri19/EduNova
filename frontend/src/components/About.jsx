@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { FaRocket, FaCode, FaBullseye, FaLock, FaUserGraduate } from "react-icons/fa";
 import { ThemeContext } from "../context/ThemeContext"; // Import your context
-import "../style/about.css";
+import "../style/About.css";
 
 const About = () => {
   const { darkMode } = useContext(ThemeContext);
