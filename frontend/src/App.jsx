@@ -195,7 +195,7 @@ function App() {
         </main>
       </div>
 
-      {showFullLayout && <NovaBot user={userDetails} />}
+      {showFullLayout && <Novabot user={userDetails} />}
 
 
     </ThemeProvider>
