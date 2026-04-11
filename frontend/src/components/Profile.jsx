@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import "../style/ProfilePage.css";
 
+// ✅ Step 1: Use dynamic API URL (matched with your App.jsx logic)
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
+
 const Profile = ({ user, onProfileUpdate, onLogout }) => {
   const [degree, setDegree] = useState(user.degree || "");
   const [currentYear, setCurrentYear] = useState(user.currentYear || "");
@@ -39,10 +42,19 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
   /* ===== SAVE ===== */
   const saveProfile = async () => {
+    // ✅ Step 2: Validate User ID before making the request
+    const userId = user.userId || user._id || user.id;
+    
+    if (!userId) {
+      toast.error("Session expired. Please log in again.");
+      return;
+    }
+
     setSaving(true);
     try {
+      // ✅ Step 3: Use API_BASE_URL instead of localhost
       const res = await fetch(
-        `http://localhost:5000/api/student/${user.userId || user._id || user.id}`,
+        `${API_BASE_URL}/api/student/${userId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -57,12 +69,14 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
       );
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data.message || "Failed to update profile");
 
+      // ✅ Step 4: Sync local state with updated data from backend
       onProfileUpdate(data.student);
-      toast.success("Profile updated");
+      toast.success("Profile synchronized successfully!");
     } catch (err) {
-      toast.error("Update failed");
+      console.error("Update Error:", err.message);
+      toast.error(err.message || "Update failed");
     } finally {
       setSaving(false);
     }
@@ -88,7 +102,6 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
         {/* ACADEMIC BAR (EDITABLE) */}
         <section className="academic-bar">
-
           <div className="academic-item">
             <span className="academic-label">Degree</span>
             <input
@@ -110,7 +123,6 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
               <option value="2">2nd Year</option>
               <option value="3">3rd Year</option>
               <option value="4">4th Year</option>
-              
             </select>
           </div>
 
@@ -126,11 +138,9 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
               onChange={(e) => setCgpa(e.target.value)}
             />
           </div>
-
         </section>
 
         <div className="profile-content">
-
           {/* SKILLS */}
           <section className="section-block">
             <div className="section-header">
@@ -213,7 +223,6 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
               + Add Project
             </button>
           </section>
-
         </div>
 
         <footer className="profile-footer">
