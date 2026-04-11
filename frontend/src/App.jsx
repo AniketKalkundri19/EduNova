@@ -15,7 +15,7 @@ import AuthPage from "./components/AuthPage";
 import Landing from "./components/Landing";
 import Profile from "./components/Profile";
 import About from "./components/About";
-import LoadingScreen from "./components/LoadingScreen"; // ✅ NEW
+import LoadingScreen from "./components/Loading"; // ✅ NEW
 
 // Styles
 import "./style/styles.css";
