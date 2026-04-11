@@ -8,7 +8,7 @@ const LoadingScreen = () => {
       <div className="loader-container">
         <div className="logo-section">
           <img 
-            src="/EduNova_Logo.png" 
+            src="../EduNova_Logo.png" 
             alt="EduNova Logo" 
             className="animated-logo" 
           />
