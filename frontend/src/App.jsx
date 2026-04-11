@@ -3,18 +3,21 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Components
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import SkillGapAnalyzer from "./components/SkillGapAnalyzer";
 import ResumeEnhancer from "./components/ResumeEnhancer";
-import StudentDetailForm from "./components/StudentDetailForm"; // Import name matches file
+import StudentDetailForm from "./components/StudentDetailForm";
 import NovaBot from "./components/Novabot";
 import AuthPage from "./components/AuthPage";
 import Landing from "./components/Landing";
 import Profile from "./components/Profile";
 import About from "./components/About";
+import LoadingScreen from "./components/LoadingScreen"; // ✅ NEW
 
+// Styles
 import "./style/styles.css";
 import "./style/Dashboard.css";
 
@@ -39,7 +42,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const [activePage, setActivePage] = useState("Dashboard");
-  const [loading, setLoading] = useState(true);
+  const [isAppLoading, setIsAppLoading] = useState(true); // ✅ Loading state
 
   const fetchStudentProfile = async (userId) => {
     try {
@@ -73,7 +76,11 @@ function App() {
           localStorage.clear();
         }
       }
-      setLoading(false);
+      
+      // ✅ Keep the loader visible for at least 2s for the animation effect
+      setTimeout(() => {
+        setIsAppLoading(false);
+      }, 2000);
     };
     checkAuthStatus();
   }, []);
@@ -107,13 +114,12 @@ function App() {
     setActivePage("Dashboard");
   };
 
-  if (loading) return null;
+  // ✅ Step 1: Show Loading Screen First
+  if (isAppLoading) return <LoadingScreen />;
 
   const renderContent = () => {
     if (showLanding) return <Landing onGetStarted={handleGetStarted} />;
     if (!isAuthenticated) return <AuthPage onAuthSuccess={handleAuthSuccess} />;
-    
-    // Fix: Using the exact import name 'StudentDetailForm'
     if (userDetails?.isNewUser) return <StudentDetailForm onSubmit={handleProfileSubmit} />;
 
     return (
@@ -149,7 +155,10 @@ function App() {
       <Header
         user={showFullLayout ? userDetails : null}
         onProfileClick={() => setActivePage("Profile")}
-        onLogoClick={() => setActivePage("About")}
+        onLogoClick={() => {
+            if(showFullLayout) setActivePage("Dashboard");
+            else setShowLanding(true);
+        }}
         onLogout={handleLogout}
       />
       <div className={`layout ${showFullLayout ? "full-layout" : "center-layout"}`}>
