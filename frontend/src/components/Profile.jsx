@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import "../style/ProfilePage.css";
 
-// ✅ Step 1: Use dynamic API URL (matched with your App.jsx logic)
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://edunova-backend-fypl.onrender.com";
 
 const Profile = ({ user, onProfileUpdate, onLogout }) => {
+  // Academic State
   const [degree, setDegree] = useState(user.degree || "");
   const [currentYear, setCurrentYear] = useState(user.currentYear || "");
   const [cgpa, setCgpa] = useState(user.cgpa || "");
+  const [grade10, setGrade10] = useState(user.grade10 || "");
+  const [grade12, setGrade12] = useState(user.grade12 || "");
 
+  // Dynamic Lists State
   const [skills, setSkills] = useState(user.customSkills || []);
   const [projects, setProjects] = useState(user.projects || []);
   const [saving, setSaving] = useState(false);
 
-  /* ===== SKILLS ===== */
-  const addSkill = () =>
-    setSkills([...skills, { name: "", level: "Beginner" }]);
+  /* ===== SKILLS LOGIC ===== */
+  const addSkill = () => setSkills([...skills, { name: "", level: "Beginner" }]);
 
   const updateSkill = (i, field, value) => {
     const updated = [...skills];
@@ -24,12 +26,10 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
     setSkills(updated);
   };
 
-  const removeSkill = (i) =>
-    setSkills(skills.filter((_, idx) => idx !== i));
+  const removeSkill = (i) => setSkills(skills.filter((_, idx) => idx !== i));
 
-  /* ===== PROJECTS ===== */
-  const addProject = () =>
-    setProjects([...projects, { title: "", description: "" }]);
+  /* ===== PROJECTS LOGIC ===== */
+  const addProject = () => setProjects([...projects, { title: "", description: "" }]);
 
   const updateProject = (i, field, value) => {
     const updated = [...projects];
@@ -37,14 +37,11 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
     setProjects(updated);
   };
 
-  const removeProject = (i) =>
-    setProjects(projects.filter((_, idx) => idx !== i));
+  const removeProject = (i) => setProjects(projects.filter((_, idx) => idx !== i));
 
-  /* ===== SAVE ===== */
+  /* ===== SAVE & SYNC ===== */
   const saveProfile = async () => {
-    // ✅ Step 2: Validate User ID before making the request
     const userId = user.userId || user._id || user.id;
-    
     if (!userId) {
       toast.error("Session expired. Please log in again.");
       return;
@@ -52,27 +49,33 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
     setSaving(true);
     try {
-      // ✅ Step 3: Use API_BASE_URL instead of localhost
-      const res = await fetch(
-        `${API_BASE_URL}/api/student/${userId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            degree,
-            currentYear,
-            cgpa,
-            customSkills: skills,
-            projects,
-          }),
-        }
-      );
+      // ✅ Step 1: Clean data (Remove ghost/empty entries)
+      const cleanSkills = skills.filter(s => s.name && s.name.trim() !== "");
+      const cleanProjects = projects.filter(p => p.title && p.title.trim() !== "");
+
+      // ✅ Step 2: Send to Backend
+      const res = await fetch(`${API_BASE_URL}/api/student/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          degree,
+          currentYear,
+          cgpa: parseFloat(cgpa) || 0,
+          grade10: parseFloat(grade10) || 0,
+          grade12: parseFloat(grade12) || 0,
+          customSkills: cleanSkills,
+          projects: cleanProjects,
+        }),
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update profile");
 
-      // ✅ Step 4: Sync local state with updated data from backend
+      // ✅ Step 3: Update local state with cleaned data
       onProfileUpdate(data.student);
+      setSkills(data.student.customSkills || []);
+      setProjects(data.student.projects || []);
+      
       toast.success("Profile synchronized successfully!");
     } catch (err) {
       console.error("Update Error:", err.message);
@@ -85,39 +88,24 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
   return (
     <div className="profile-page">
       <div className="profile-card">
-
-        {/* HEADER */}
         <header className="profile-header">
           <div>
             <h1 className="profile-title">Student Portfolio</h1>
-            <p className="profile-subtitle">
-              Update your credentials and technical expertise
-            </p>
+            <p className="profile-subtitle">Update your credentials and expertise</p>
           </div>
-
-          <button className="btn btn-danger-outline" onClick={onLogout}>
-            Logout
-          </button>
+          <button className="btn btn-danger-outline" onClick={onLogout}>Logout</button>
         </header>
 
-        {/* ACADEMIC BAR (EDITABLE) */}
+        {/* ACADEMIC BAR */}
         <section className="academic-bar">
           <div className="academic-item">
             <span className="academic-label">Degree</span>
-            <input
-              className="academic-input"
-              value={degree}
-              onChange={(e) => setDegree(e.target.value)}
-            />
+            <input className="academic-input" value={degree} onChange={(e) => setDegree(e.target.value)} />
           </div>
 
           <div className="academic-item">
-            <span className="academic-label">Academic Year</span>
-            <select
-              className="academic-input"
-              value={currentYear}
-              onChange={(e) => setCurrentYear(e.target.value)}
-            >
+            <span className="academic-label">Year</span>
+            <select className="academic-input" value={currentYear} onChange={(e) => setCurrentYear(e.target.value)}>
               <option value="">Select</option>
               <option value="1">1st Year</option>
               <option value="2">2nd Year</option>
@@ -128,109 +116,52 @@ const Profile = ({ user, onProfileUpdate, onLogout }) => {
 
           <div className="academic-item">
             <span className="academic-label">CGPA</span>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              max="10"
-              className="academic-input highlight"
-              value={cgpa}
-              onChange={(e) => setCgpa(e.target.value)}
-            />
+            <input type="number" step="0.01" min="0" max="10" className="academic-input highlight" value={cgpa} onChange={(e) => setCgpa(e.target.value)} />
           </div>
         </section>
 
         <div className="profile-content">
-          {/* SKILLS */}
+          {/* SKILLS SECTION */}
           <section className="section-block">
             <div className="section-header">
               <h3>Technical Skills</h3>
               <span className="badge">{skills.length}</span>
             </div>
-
             {skills.map((s, i) => (
               <div key={i} className="skill-row">
-                <input
-                  className="input"
-                  placeholder="Skill (e.g. Python)"
-                  value={s.name}
-                  onChange={(e) => updateSkill(i, "name", e.target.value)}
-                />
-
-                <select
-                  className="input"
-                  value={s.level}
-                  onChange={(e) => updateSkill(i, "level", e.target.value)}
-                >
+                <input className="input" placeholder="Skill Name" value={s.name} onChange={(e) => updateSkill(i, "name", e.target.value)} />
+                <select className="input" value={s.level} onChange={(e) => updateSkill(i, "level", e.target.value)}>
                   <option>Beginner</option>
                   <option>Intermediate</option>
                   <option>Expert</option>
                 </select>
-
-                <button
-                  className="btn btn-danger"
-                  onClick={() => removeSkill(i)}
-                >
-                  ✕
-                </button>
+                <button className="btn btn-danger" onClick={() => removeSkill(i)}>✕</button>
               </div>
             ))}
-
-            <button className="btn btn-dashed" onClick={addSkill}>
-              + Add Skill
-            </button>
+            <button className="btn btn-dashed" onClick={addSkill}>+ Add Skill</button>
           </section>
 
-          {/* PROJECTS */}
+          {/* PROJECTS SECTION */}
           <section className="section-block">
             <div className="section-header">
               <h3>Featured Projects</h3>
               <span className="badge">{projects.length}</span>
             </div>
-
             {projects.map((p, i) => (
               <div key={i} className="project-card">
                 <div className="project-header">
-                  <input
-                    className="project-title-input"
-                    placeholder="Project Title"
-                    value={p.title}
-                    onChange={(e) =>
-                      updateProject(i, "title", e.target.value)
-                    }
-                  />
-
-                  <button
-                    className="btn btn-danger-text"
-                    onClick={() => removeProject(i)}
-                  >
-                    Delete
-                  </button>
+                  <input className="project-title-input" placeholder="Project Title" value={p.title} onChange={(e) => updateProject(i, "title", e.target.value)} />
+                  <button className="btn btn-danger-text" onClick={() => removeProject(i)}>Delete</button>
                 </div>
-
-                <textarea
-                  className="textarea"
-                  placeholder="Describe your role, technologies used, and outcomes..."
-                  value={p.description}
-                  onChange={(e) =>
-                    updateProject(i, "description", e.target.value)
-                  }
-                />
+                <textarea className="textarea" placeholder="Description..." value={p.description} onChange={(e) => updateProject(i, "description", e.target.value)} />
               </div>
             ))}
-
-            <button className="btn btn-dashed" onClick={addProject}>
-              + Add Project
-            </button>
+            <button className="btn btn-dashed" onClick={addProject}>+ Add Project</button>
           </section>
         </div>
 
         <footer className="profile-footer">
-          <button
-            className="btn btn-primary full"
-            onClick={saveProfile}
-            disabled={saving}
-          >
+          <button className="btn btn-primary full" onClick={saveProfile} disabled={saving}>
             {saving ? "Saving..." : "Save & Synchronize Profile"}
           </button>
         </footer>
