@@ -99,7 +99,7 @@ const StudentDetailForm = ({ onSubmit }) => {
         <h2>Student Details</h2>
         <div className="grid-2">
           <input type="text" placeholder="Degree" value={formData.degree} onChange={(e) => handleChange("degree", e.target.value)} required />
-          <input type="text" placeholder="Current Year" value={formData.currentYear} onChange={(e) => handleChange("currentYear", e.target.value)} required />
+          <input type="text" placeholder="Current Academic Year" value={formData.currentYear} onChange={(e) => handleChange("currentYear", e.target.value)} required />
           <input type="number" placeholder="CGPA" step="0.01" min="0" max="10" value={formData.cgpa} onChange={(e) => handleChange("cgpa", e.target.value)} required />
           <input type="number" placeholder="10th (%)" step="0.01" min="0" max="100" value={formData.grade10} onChange={(e) => handleChange("grade10", e.target.value)} required />
           <input type="number" placeholder="12th (%)"step="0.01"  min="0" max="100" value={formData.grade12} onChange={(e) => handleChange("grade12", e.target.value)} required />
