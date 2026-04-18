@@ -6,7 +6,12 @@ import "../style/Dashboard.css";
 const Dashboard = ({ user }) => {
   const { darkMode } = useContext(ThemeContext);
 
-  const isProfileIncomplete = !user?.customSkills?.length && !user?.projects?.length;
+  // ✅ Clean existing lists for logic checks
+  const validSkills = user?.customSkills?.filter(s => s.name?.trim()) || [];
+  const validProjects = user?.projects?.filter(p => p.title?.trim()) || [];
+
+  // Update check to use valid data only
+  const isProfileIncomplete = validSkills.length === 0 && validProjects.length === 0;
 
   if (!user) {
     return (
@@ -21,9 +26,7 @@ const Dashboard = ({ user }) => {
     <div className={`dashboard ${darkMode ? "dark" : ""}`}>
       {/* ===== Premium Header ===== */}
       <header className="dashboard-header">
-      <div className="header-main">
-        
-          {/* 🔑 Use our new isProfileIncomplete check here! */}
+        <div className="header-main">
           <h1>
             {isProfileIncomplete ? "Welcome" : "Welcome Back"}, {user?.name?.split(" ")[0] || "Explorer"} 👋
           </h1>
@@ -32,7 +35,6 @@ const Dashboard = ({ user }) => {
               ? "Please fill the details about your projects and skills to get useful insights in Profile above ⬆️." 
               : "Your academic path is clear. Here is your current standing."}
           </p>
-          
         </div>
         <div className="header-pills">
           <div className="stat-pill">
@@ -79,9 +81,10 @@ const Dashboard = ({ user }) => {
             <Code size={20} className="text-indigo" />
             <h3>Technical Arsenal</h3>
           </div>
-          {user.customSkills?.length > 0 ? (
+          {/* ✅ Check against validSkills instead of raw user.customSkills */}
+          {validSkills.length > 0 ? (
             <div className="premium-skills-grid">
-              {user.customSkills.map((skill, i) => (
+              {validSkills.map((skill, i) => (
                 <div key={i} className="skill-item-new">
                   <span className="skill-name">{skill.name}</span>
                   <span className={`badge-new ${skill.level?.toLowerCase()}`}>
@@ -101,9 +104,10 @@ const Dashboard = ({ user }) => {
             <Rocket size={20} className="text-indigo" />
             <h3>Innovation Projects</h3>
           </div>
-          {user.projects?.length > 0 ? (
+          {/* ✅ Check against validProjects instead of raw user.projects */}
+          {validProjects.length > 0 ? (
             <div className="premium-project-grid">
-              {user.projects.map((proj, i) => (
+              {validProjects.map((proj, i) => (
                 <div key={i} className="project-node">
                   <div className="node-icon"><Award size={18}/></div>
                   <div className="node-content">
